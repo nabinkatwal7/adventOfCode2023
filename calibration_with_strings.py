@@ -1,22 +1,11 @@
-import re
-
-def calculate_calibration_value(line):
-    digits = re.findall(r'\d+|[a-zA-Z]+', line)
-    
-    digit_mapping = {'one': '1', 'two': '2', 'three': '3', 'four': '4', 'five': '5', 'six': '6', 'seven': '7', 'eight': '8', 'nine': '9'}
-    digits = [digit_mapping.get(d, d) for d in digits]
-    
-    first_digit = int(digits[0])
-    last_digit = int(digits[-1])
-    
-    return int(f"{first_digit}{last_digit}")
+from utils.solution_base import SolutionBase
 
 
-lines = ["two1nine", "abcone2threexyz", "xtwone3four", "4nineeightseven2", "zoneight234", "7pqrstsixteen"]
+class Solution(SolutionBase):
+    def part1(self, data):
+        return sum((digits := [int(i) for i in line if i.isdigit()])[0] * 10 + digits[-1] for line in data)
 
-calibration_values = [calculate_calibration_value(line) for line in lines]
-
-total_calibration_value = sum(calibration_values)
-
-print("Calibration values:", calibration_values)
-print("Sum of calibration values:", total_calibration_value)
+    def part2(self, data):
+        mappings = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+        new_data = [[x if (x := "".join([str(idx) for idx, val in enumerate(mappings, 1) if line[i:].startswith(val)])) else line[i] for i in range(len(line))] for line in data]
+        return self.part1(new_data)
