@@ -1,6 +1,3 @@
-import sys
-import re
-from collections import defaultdict
 D = open('input.txt').read().strip()
 L = D.split('\n')
 
